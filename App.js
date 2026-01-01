@@ -9,30 +9,22 @@ import Colors from "./constants/Colors";
 import EditExpenseScreen from "./screens/EditExpenseScreen";
 import { GlobalStyles } from "./constants/styles";
 import IconButton from "./components/IconButton";
+import * as SystemUI from "expo-system-ui";
+
+SystemUI.setBackgroundColorAsync("#2d0689");
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const navTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: GlobalStyles.colors.primary700,
-    card: GlobalStyles.colors.primary700,
-  },
-};
-
 function TabNavigation() {
   return (
     <Tab.Navigator
-      sceneContainerStyle={{ backgroundColor: GlobalStyles.colors.primary700 }}
       screenOptions={({ navigation }) => ({
         headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         headerTintColor: "white",
         tabBarStyle: {
           backgroundColor: GlobalStyles.colors.primary500,
         },
-        // sceneStyle: { backgroundColor: GlobalStyles.colors.primary700 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
         tabBarInactiveTintColor: Colors.white,
         headerRight: ({ tintColor }) => (
@@ -77,12 +69,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <NavigationContainer theme={navTheme}>
+      <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
             headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
             headerTintColor: Colors.white,
-            // contentStyle: { backgroundColor: GlobalStyles.colors.primary700 },
           }}
         >
           <Stack.Screen
@@ -96,8 +87,6 @@ export default function App() {
             options={{
               title: "Manage Expense",
               presentation: "modal",
-              animation: "fade",
-              contentStyle: { backgroundColor: GlobalStyles.colors.primary700 },
             }}
           />
         </Stack.Navigator>
