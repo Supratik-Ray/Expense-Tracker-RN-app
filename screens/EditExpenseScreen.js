@@ -1,11 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Button from "../components/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Colors from "../constants/Colors";
-import { useLayoutEffect } from "react";
+
+import { useContext, useLayoutEffect } from "react";
 import { GlobalStyles } from "../constants/styles";
+import { ExpensesContext } from "../contexts/ExpensesContext";
 
 export default function EditExpenseScreen({ navigation, route }) {
+  const { addExpense, deleteExpense, updateExpense } =
+    useContext(ExpensesContext);
+
   const editedExpenseId = route.params?.expenseId;
 
   const isEditing = !!editedExpenseId;
@@ -16,25 +20,54 @@ export default function EditExpenseScreen({ navigation, route }) {
     });
   }, []);
 
+  function deleteHandler() {
+    deleteExpense(editedExpenseId);
+    navigation.goBack();
+  }
+  function cancelHandler() {
+    navigation.goBack();
+  }
+
+  function confirmHandler() {
+    if (isEditing) {
+      updateExpense(editedExpenseId, {
+        description: "test",
+        amount: 19.5,
+        date: new Date("2026-01-01"),
+      });
+    } else {
+      addExpense({
+        description: "test",
+        amount: 19.5,
+        date: new Date("2026-01-01"),
+      });
+    }
+    navigation.goBack();
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
-          <Button backgroundColor={Colors.violet500} textColor={"#ccc"}>
+          <Button mode={"flat"} onPress={cancelHandler}>
             Cancel
           </Button>
         </View>
         <View style={styles.buttonContainer}>
-          <Button>Update</Button>
+          <Button onPress={confirmHandler}>
+            {isEditing ? "Update" : "Add"}
+          </Button>
         </View>
       </View>
       {isEditing && (
         <View style={styles.deleteButton}>
-          <Ionicons
-            name="trash"
-            color={GlobalStyles.colors.error500}
-            size={36}
-          />
+          <Pressable onPress={deleteHandler}>
+            <Ionicons
+              name="trash"
+              color={GlobalStyles.colors.error500}
+              size={36}
+            />
+          </Pressable>
         </View>
       )}
     </View>
@@ -55,8 +88,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: { flex: 1 },
   deleteButton: {
-    borderTopWidth: 1,
-    borderColor: "#fff",
+    borderTopWidth: 2,
+    borderColor: GlobalStyles.colors.primary200,
     padding: 20,
     flexDirection: "row",
     justifyContent: "center",

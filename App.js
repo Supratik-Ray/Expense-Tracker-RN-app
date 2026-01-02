@@ -10,6 +10,7 @@ import EditExpenseScreen from "./screens/EditExpenseScreen";
 import { GlobalStyles } from "./constants/styles";
 import IconButton from "./components/IconButton";
 import * as SystemUI from "expo-system-ui";
+import { ExpensesContextProvider } from "./contexts/ExpensesContext";
 
 SystemUI.setBackgroundColorAsync("#2d0689");
 
@@ -69,28 +70,30 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-            headerTintColor: Colors.white,
-          }}
-        >
-          <Stack.Screen
-            name="tab"
-            component={TabNavigation}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="editExpense"
-            component={EditExpenseScreen}
-            options={{
-              title: "Manage Expense",
-              presentation: "modal",
+      <ExpensesContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+              headerTintColor: Colors.white,
             }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+          >
+            <Stack.Screen
+              name="tab"
+              component={TabNavigation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="editExpense"
+              component={EditExpenseScreen}
+              options={{
+                title: "Manage Expense",
+                presentation: "modal",
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ExpensesContextProvider>
     </>
   );
 }

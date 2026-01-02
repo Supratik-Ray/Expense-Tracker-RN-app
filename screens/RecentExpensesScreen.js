@@ -1,40 +1,22 @@
-import { StyleSheet, Text, View } from "react-native";
 import ExpensesOutput from "../components/expensesOutput/ExpensesOutput";
+import { useContext } from "react";
+import { ExpensesContext } from "../contexts/ExpensesContext";
+import { getDateMinusDays } from "../utility/date";
 
 export default function RecentExpensesScreen() {
-  const expenses = [
-    {
-      id: "E1",
-      description: "A book",
-      amount: 14.99,
-      date: new Date("2025-12-25"),
-    },
-    {
-      id: "E2",
-      description: "Another book",
-      amount: 20.65,
-      date: new Date("2025-12-22"),
-    },
-    {
-      id: "E3",
-      description: "A book",
-      amount: 5.99,
-      date: new Date("2025-12-21"),
-    },
-    {
-      id: "E4",
-      description: "Another book",
-      amount: 23.65,
-      date: new Date("2025-12-05"),
-    },
-    {
-      id: "E5",
-      description: "Another book",
-      amount: 23.65,
-      date: new Date("2025-12-01"),
-    },
-  ];
-  return <ExpensesOutput periodName={"Last 7 Days"} expenses={expenses} />;
-}
+  const { expenses } = useContext(ExpensesContext);
 
-const styles = StyleSheet.create({});
+  const today = new Date();
+  const date7DaysAgo = getDateMinusDays(today, 7);
+  const recentExpenses = expenses.filter(
+    (expense) => expense.date >= date7DaysAgo && expense.date <= today
+  );
+
+  return (
+    <ExpensesOutput
+      periodName={"Last 7 Days"}
+      expenses={recentExpenses}
+      fallbackText={"No registered expenses available for last 7 days"}
+    />
+  );
+}

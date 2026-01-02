@@ -1,21 +1,19 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import Colors from "../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
+import { GlobalStyles } from "../constants/styles";
 
-export default function Button({ children, backgroundColor, textColor }) {
-  const navigation = useNavigation();
+export default function Button({ children, onPress, mode }) {
   return (
-    <View style={[styles.button, backgroundColor ? { backgroundColor } : {}]}>
+    <View>
       <Pressable
-        style={styles.buttonInnerContainer}
-        onPress={() => navigation.goBack()}
-        android_ripple={{ color: "#ffffff22", foreground: true }}
+        onPress={onPress}
+        style={({ pressed }) => pressed && styles.pressed}
       >
-        <Text
-          style={[styles.buttonText, textColor ? { color: textColor } : {}]}
-        >
-          {children}
-        </Text>
+        <View style={[styles.button, mode === "flat" && styles.flat]}>
+          <Text style={[styles.buttonText, mode === "flat" && styles.flatText]}>
+            {children}
+          </Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -23,13 +21,23 @@ export default function Button({ children, backgroundColor, textColor }) {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.violet300,
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: GlobalStyles.colors.primary500,
   },
-  buttonInnerContainer: {
-    padding: 10,
+  flat: {
+    backgroundColor: "transparent",
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
+  },
+  flatText: {
+    color: GlobalStyles.colors.primary200,
+  },
+  pressed: {
+    opacity: 0.75,
+    backgroundColor: GlobalStyles.colors.primary100,
+    borderRadius: 4,
   },
 });
