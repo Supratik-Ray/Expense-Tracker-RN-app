@@ -1,5 +1,4 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import Button from "../components/Button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { useContext, useLayoutEffect } from "react";
@@ -8,12 +7,16 @@ import { ExpensesContext } from "../contexts/ExpensesContext";
 import ExpenseForm from "../components/manageExpense/ExpenseForm";
 
 export default function ManageExpenseScreen({ navigation, route }) {
-  const { addExpense, deleteExpense, updateExpense } =
+  const { addExpense, deleteExpense, updateExpense, expenses } =
     useContext(ExpensesContext);
 
   const editedExpenseId = route.params?.expenseId;
 
   const isEditing = !!editedExpenseId;
+
+  const selectedExpense = expenses.find(
+    (expense) => expense.id === editedExpenseId
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,6 +47,7 @@ export default function ManageExpenseScreen({ navigation, route }) {
         onCancel={cancelHandler}
         onConfirm={confirmHandler}
         confirmButtonLabel={isEditing ? "Update" : "Add"}
+        defaultValues={selectedExpense}
       />
 
       {isEditing && (

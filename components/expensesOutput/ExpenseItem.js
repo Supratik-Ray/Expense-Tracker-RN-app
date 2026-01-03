@@ -2,6 +2,7 @@ import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import Colors from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalStyles } from "../../constants/styles";
+import { formatDate } from "../../utility/date";
 
 export default function ExpenseItem({ expense }) {
   const navigation = useNavigation();
@@ -23,9 +24,7 @@ export default function ExpenseItem({ expense }) {
           <Text style={[styles.expenseTitle, styles.textBase]}>
             {expense.description}
           </Text>
-          <Text style={styles.textBase}>
-            {expense.date.toLocaleDateString()}
-          </Text>
+          <Text style={styles.textBase}>{formatDate(expense.date)}</Text>
         </View>
         <View style={styles.expenseValueContainer}>
           <Text style={styles.expenseValue}>{expense.amount.toFixed(2)}</Text>

@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import Colors from "../constants/Colors";
 import { GlobalStyles } from "../constants/styles";
 
 export default function Button({ children, onPress, mode }) {
@@ -27,6 +26,8 @@ const styles = StyleSheet.create({
   },
   flat: {
     backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: GlobalStyles.colors.primary100,
   },
   buttonText: {
     color: "#fff",
