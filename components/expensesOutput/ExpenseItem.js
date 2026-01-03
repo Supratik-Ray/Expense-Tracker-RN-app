@@ -6,7 +6,7 @@ import { GlobalStyles } from "../../constants/styles";
 export default function ExpenseItem({ expense }) {
   const navigation = useNavigation();
   function editExpense() {
-    navigation.navigate("editExpense", { expenseId: expense.id });
+    navigation.navigate("manageExpense", { expenseId: expense.id });
   }
   return (
     <View style={styles.expenseItem}>

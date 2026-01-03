@@ -5,8 +5,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useContext, useLayoutEffect } from "react";
 import { GlobalStyles } from "../constants/styles";
 import { ExpensesContext } from "../contexts/ExpensesContext";
+import ExpenseForm from "../components/manageExpense/ExpenseForm";
 
-export default function EditExpenseScreen({ navigation, route }) {
+export default function ManageExpenseScreen({ navigation, route }) {
   const { addExpense, deleteExpense, updateExpense } =
     useContext(ExpensesContext);
 
@@ -28,37 +29,23 @@ export default function EditExpenseScreen({ navigation, route }) {
     navigation.goBack();
   }
 
-  function confirmHandler() {
+  function confirmHandler(expenseData) {
     if (isEditing) {
-      updateExpense(editedExpenseId, {
-        description: "test",
-        amount: 19.5,
-        date: new Date("2026-01-01"),
-      });
+      updateExpense(editedExpenseId, expenseData);
     } else {
-      addExpense({
-        description: "test",
-        amount: 19.5,
-        date: new Date("2026-01-01"),
-      });
+      addExpense(expenseData);
     }
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonContainer}>
-          <Button mode={"flat"} onPress={cancelHandler}>
-            Cancel
-          </Button>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button onPress={confirmHandler}>
-            {isEditing ? "Update" : "Add"}
-          </Button>
-        </View>
-      </View>
+      <ExpenseForm
+        onCancel={cancelHandler}
+        onConfirm={confirmHandler}
+        confirmButtonLabel={isEditing ? "Update" : "Add"}
+      />
+
       {isEditing && (
         <View style={styles.deleteButton}>
           <Pressable onPress={deleteHandler}>
@@ -81,12 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: GlobalStyles.colors.primary700,
   },
-  buttonsContainer: {
-    flexDirection: "row",
-    gap: 20,
-    width: "70%",
-  },
-  buttonContainer: { flex: 1 },
+
   deleteButton: {
     borderTopWidth: 2,
     borderColor: GlobalStyles.colors.primary200,

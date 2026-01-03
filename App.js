@@ -6,7 +6,7 @@ import AllExpensesScreen from "./screens/AllExpensesScreen";
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "./constants/Colors";
-import EditExpenseScreen from "./screens/EditExpenseScreen";
+import ManageExpenseScreen from "./screens/ManageExpenseScreen";
 import { GlobalStyles } from "./constants/styles";
 import IconButton from "./components/IconButton";
 import * as SystemUI from "expo-system-ui";
@@ -34,7 +34,7 @@ function TabNavigation() {
             color={tintColor}
             size={24}
             onPress={() => {
-              navigation.navigate("editExpense");
+              navigation.navigate("manageExpense");
             }}
           />
         ),
@@ -84,8 +84,8 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="editExpense"
-              component={EditExpenseScreen}
+              name="manageExpense"
+              component={ManageExpenseScreen}
               options={{
                 title: "Manage Expense",
                 presentation: "modal",
