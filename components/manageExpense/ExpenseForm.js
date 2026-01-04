@@ -4,6 +4,7 @@ import Button from "../Button";
 import { useState } from "react";
 import { formatDate } from "../../utility/date";
 import { GlobalStyles } from "../../constants/styles";
+import { Picker } from "@react-native-picker/picker";
 
 export default function ExpenseForm({
   onCancel,
@@ -24,6 +25,9 @@ export default function ExpenseForm({
       value: defaultValues ? defaultValues.description : "",
       isValid: true,
     },
+    category: {
+      value: defaultValues ? defaultValues.category : "food",
+    },
   });
 
   function inputChangeHandler(inputIdentifier, inputValue) {
@@ -38,6 +42,7 @@ export default function ExpenseForm({
       amount: +inputs.amount.value,
       date: new Date(inputs.date.value),
       description: inputs.description.value,
+      category: inputs.category.value,
     };
 
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
@@ -91,6 +96,26 @@ export default function ExpenseForm({
           style={styles.rowInput}
         />
       </View>
+
+      <Text style={styles.label}>Category</Text>
+
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={inputs.category.value}
+          onValueChange={(itemValue, itemIndex) =>
+            inputChangeHandler("category", itemValue)
+          }
+          style={styles.picker}
+        >
+          <Picker.Item label="Food" value="food" />
+          <Picker.Item label="Transport" value="transport" />
+          <Picker.Item label="Shopping" value="shopping" />
+          <Picker.Item label="Education" value="education" />
+          <Picker.Item label="Entertainment" value="entertainment" />
+          <Picker.Item label="Others" value="others" />
+        </Picker>
+      </View>
+
       <Input
         label={"Description"}
         textInputConfig={{
@@ -122,6 +147,11 @@ export default function ExpenseForm({
 }
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 12,
+    color: GlobalStyles.colors.primary100,
+    marginBottom: 4,
+  },
   form: {
     width: "95%",
     marginBottom: 20,
@@ -152,5 +182,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: GlobalStyles.colors.error500,
     margin: 8,
+  },
+  pickerContainer: {
+    backgroundColor: "white",
+    borderRadius: 6,
+    overflow: "hidden",
   },
 });

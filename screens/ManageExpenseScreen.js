@@ -26,6 +26,8 @@ export default function ManageExpenseScreen({ navigation, route }) {
     (expense) => expense.id === editedExpenseId
   );
 
+  console.log(selectedExpense);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? "Manage Expense" : "Add Expense",
@@ -43,6 +45,7 @@ export default function ManageExpenseScreen({ navigation, route }) {
   }
 
   async function confirmHandler(expenseData) {
+    console.log(expenseData);
     setIsLoading(true);
     if (isEditing) {
       await updateExpensefirebase(editedExpenseId, expenseData);

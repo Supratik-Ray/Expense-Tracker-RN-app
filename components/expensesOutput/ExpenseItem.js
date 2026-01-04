@@ -1,5 +1,4 @@
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import Colors from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { GlobalStyles } from "../../constants/styles";
 import { formatDate } from "../../utility/date";

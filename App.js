@@ -1,16 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AllExpensesScreen from "./screens/AllExpensesScreen";
 import RecentExpensesScreen from "./screens/RecentExpensesScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Colors from "./constants/Colors";
 import ManageExpenseScreen from "./screens/ManageExpenseScreen";
 import { GlobalStyles } from "./constants/styles";
 import IconButton from "./components/IconButton";
 import * as SystemUI from "expo-system-ui";
 import { ExpensesContextProvider } from "./contexts/ExpensesContext";
+import SummaryScreen from "./screens/SummaryScreen";
 
 SystemUI.setBackgroundColorAsync("#2d0689");
 
@@ -27,7 +27,7 @@ function TabNavigation() {
           backgroundColor: GlobalStyles.colors.primary500,
         },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
-        tabBarInactiveTintColor: Colors.white,
+        tabBarInactiveTintColor: "white",
         headerRight: ({ tintColor }) => (
           <IconButton
             icon="add"
@@ -62,6 +62,17 @@ function TabNavigation() {
           tabBarLabel: "All Expenses",
         }}
       />
+      <Tab.Screen
+        name="summary"
+        component={SummaryScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="pie-chart" color={color} size={size} />
+          ),
+          title: "Expense Summary",
+          tabBarLabel: "summary",
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -75,7 +86,7 @@ export default function App() {
           <Stack.Navigator
             screenOptions={{
               headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-              headerTintColor: Colors.white,
+              headerTintColor: "white",
             }}
           >
             <Stack.Screen
