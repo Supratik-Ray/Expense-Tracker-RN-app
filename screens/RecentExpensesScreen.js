@@ -1,10 +1,37 @@
 import ExpensesOutput from "../components/expensesOutput/ExpensesOutput";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ExpensesContext } from "../contexts/ExpensesContext";
 import { getDateMinusDays } from "../utility/date";
+import { getExpenses } from "../utility/http";
+import LoadingOverlay from "../components/LoadingOverlay";
+import ErrorOverlay from "../components/ErrorOverlay";
 
 export default function RecentExpensesScreen() {
-  const { expenses } = useContext(ExpensesContext);
+  const { expenses, setExpenses } = useContext(ExpensesContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        const expenses = await getExpenses();
+        setExpenses(expenses);
+      } catch (err) {
+        setError("Couldn't fetch expenses");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchExpenses();
+  }, []);
+
+  if (error) {
+    return <ErrorOverlay errorMessage={error} />;
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   const today = new Date();
   const date7DaysAgo = getDateMinusDays(today, 7);

@@ -1,14 +1,22 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { GlobalStyles } from "../constants/styles";
 import { ExpensesContext } from "../contexts/ExpensesContext";
 import ExpenseForm from "../components/manageExpense/ExpenseForm";
+import {
+  deleteExpenseFirebase,
+  storeExpense,
+  updateExpensefirebase,
+} from "../utility/http";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function ManageExpenseScreen({ navigation, route }) {
   const { addExpense, deleteExpense, updateExpense, expenses } =
     useContext(ExpensesContext);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const editedExpenseId = route.params?.expenseId;
 
@@ -20,11 +28,13 @@ export default function ManageExpenseScreen({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditing ? "Edit Expense" : "Add Expense",
+      title: isEditing ? "Manage Expense" : "Add Expense",
     });
   }, []);
 
-  function deleteHandler() {
+  async function deleteHandler() {
+    setIsLoading(true);
+    await deleteExpenseFirebase(editedExpenseId);
     deleteExpense(editedExpenseId);
     navigation.goBack();
   }
@@ -32,14 +42,19 @@ export default function ManageExpenseScreen({ navigation, route }) {
     navigation.goBack();
   }
 
-  function confirmHandler(expenseData) {
+  async function confirmHandler(expenseData) {
+    setIsLoading(true);
     if (isEditing) {
+      await updateExpensefirebase(editedExpenseId, expenseData);
       updateExpense(editedExpenseId, expenseData);
     } else {
-      addExpense(expenseData);
+      const id = await storeExpense(expenseData);
+      addExpense({ ...expenseData, id });
     }
     navigation.goBack();
   }
+
+  if (isLoading) return <LoadingOverlay />;
 
   return (
     <View style={styles.container}>

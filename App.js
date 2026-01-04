@@ -41,17 +41,6 @@ function TabNavigation() {
       })}
     >
       <Tab.Screen
-        name="AllExpenses"
-        component={AllExpensesScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="hourglass" color={color} size={size} />
-          ),
-          title: "All Expenses",
-          tabBarLabel: "All Expenses",
-        }}
-      />
-      <Tab.Screen
         name="RecentExpenses"
         component={RecentExpensesScreen}
         options={{
@@ -60,6 +49,17 @@ function TabNavigation() {
           ),
           title: "Recent Expenses",
           tabBarLabel: "Recent",
+        }}
+      />
+      <Tab.Screen
+        name="AllExpenses"
+        component={AllExpensesScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hourglass" color={color} size={size} />
+          ),
+          title: "All Expenses",
+          tabBarLabel: "All Expenses",
         }}
       />
     </Tab.Navigator>
