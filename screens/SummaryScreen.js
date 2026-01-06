@@ -48,15 +48,19 @@ export default function SummaryScreen() {
           sectionAutoFocus
         />
       </View>
-      <View style={styles.legend}>
-        {pieData.map((item) => (
-          <View key={item.label} style={styles.legendRow}>
-            <View style={[styles.colorBox, { backgroundColor: item.color }]} />
-            <Text style={styles.legendText}>
-              {item.label} – {item.value}
-            </Text>
-          </View>
-        ))}
+      <View style={styles.legendContainer}>
+        <View style={styles.legend}>
+          {pieData.map((item) => (
+            <View key={item.label} style={styles.legendRow}>
+              <View
+                style={[styles.colorBox, { backgroundColor: item.color }]}
+              />
+              <Text style={styles.legendText}>
+                {item.label} – {item.value}
+              </Text>
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -71,6 +75,7 @@ const styles = StyleSheet.create({
   chartContainer: {
     alignItems: "center",
   },
+  legendContainer: { alignItems: "center" },
   legend: {
     marginTop: 24,
   },

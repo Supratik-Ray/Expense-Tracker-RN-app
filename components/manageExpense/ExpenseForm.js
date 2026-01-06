@@ -1,10 +1,11 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import Input from "./Input";
 import Button from "../Button";
 import { useState } from "react";
 import { formatDate } from "../../utility/date";
 import { GlobalStyles } from "../../constants/styles";
 import { Picker } from "@react-native-picker/picker";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 export default function ExpenseForm({
   onCancel,
@@ -18,7 +19,9 @@ export default function ExpenseForm({
       isValid: true,
     },
     date: {
-      value: defaultValues ? formatDate(defaultValues.date) : "",
+      value: defaultValues
+        ? formatDate(defaultValues.date)
+        : formatDate(new Date()),
       isValid: true,
     },
     description: {
@@ -52,6 +55,7 @@ export default function ExpenseForm({
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
       // Alert.alert("Invalid Input", "Please check your input values");
       setInputs((currentInput) => ({
+        ...currentInput,
         amount: { value: currentInput.amount.value, isValid: amountIsValid },
         date: { value: currentInput.date.value, isValid: dateIsValid },
         description: {
@@ -64,6 +68,19 @@ export default function ExpenseForm({
 
     onConfirm(expenseData);
   }
+
+  const onDateChange = (event, selectedDate) => {
+    inputChangeHandler("date", formatDate(selectedDate));
+  };
+
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: new Date(inputs.date.value),
+      onChange: onDateChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
 
   const formIsInvalid =
     !inputs.amount.isValid ||
@@ -84,17 +101,26 @@ export default function ExpenseForm({
           isInvalid={!inputs.amount.isValid}
           style={styles.rowInput}
         />
-        <Input
-          label={"Date"}
-          textInputConfig={{
-            placeholder: "YYYY-MM-DD",
-            maxLength: 10,
-            onChangeText: inputChangeHandler.bind(this, "date"),
-            value: inputs.date.value,
-          }}
-          isInvalid={!inputs.date.isValid}
-          style={styles.rowInput}
-        />
+        <View style={styles.datePicker}>
+          <Pressable
+            onPress={() => {
+              showMode("date");
+            }}
+          >
+            <Input
+              label={"Date"}
+              textInputConfig={{
+                placeholder: "YYYY-MM-DD",
+                maxLength: 10,
+                onChangeText: inputChangeHandler.bind(this, "date"),
+                value: inputs.date.value,
+                editable: false,
+              }}
+              isInvalid={!inputs.date.isValid}
+              // style={styles.rowInput}
+            />
+          </Pressable>
+        </View>
       </View>
 
       <Text style={styles.label}>Category</Text>
@@ -187,5 +213,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 6,
     overflow: "hidden",
+  },
+  datePicker: {
+    flex: 1,
   },
 });
